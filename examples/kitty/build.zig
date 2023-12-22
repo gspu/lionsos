@@ -8,6 +8,9 @@ var libmicrokit: std.Build.LazyPath = undefined;
 var libmicrokit_linker_script: std.Build.LazyPath = undefined;
 var libmicrokit_include: std.Build.LazyPath = undefined;
 
+// @ivanv: ideally this would just be gone
+const no_ub_santize = [_][]const u8{ "-fno-sanitize=undefined" };
+
 fn addMicrokitProtectionDomain(b: *std.Build, options: std.Build.ExecutableOptions) *std.Build.Step.Compile {
     const pd = b.addExecutable(options);
     pd.addObjectFile(libmicrokit);
@@ -226,19 +229,22 @@ pub fn build(b: *std.Build) !void {
 
     const serial_ring = b.addObject(.{
         .name = "sddf_serial_shared_ring_buffer",
-        .root_source_file = sddf.path("serial/libserialsharedringbuffer/shared_ringbuffer.c"),
         .target = target,
         .optimize = optimize,
+    });
+    serial_ring.addCSourceFile(.{
+        .file = sddf.path("serial/libserialsharedringbuffer/shared_ringbuffer.c"),
+        .flags = &no_ub_santize
     });
     serial_ring.addIncludePath(sddf.path("include"));
     serial_ring.addIncludePath(sddf.path("util/include"));
 
     const ethernet_ring = b.addObject(.{
         .name = "sddf_ethernet_shared_ring_buffer",
-        .root_source_file = sddf.path("network/libethsharedringbuffer/shared_ringbuffer.c"),
         .target = target,
         .optimize = optimize,
     });
+    ethernet_ring.addCSourceFile(.{ .file = sddf.path("network/libethsharedringbuffer/shared_ringbuffer.c"), .flags = &no_ub_santize });
     ethernet_ring.addIncludePath(libmicrokit_include);
     ethernet_ring.addIncludePath(sddf.path("include"));
     ethernet_ring.addIncludePath(sddf.path("util/include"));
@@ -297,7 +303,7 @@ pub fn build(b: *std.Build) !void {
         .target = target,
         .optimize = optimize,
     });
-    ethernet_driver.addCSourceFile(.{ .file = sddf.path("drivers/network/meson/ethernet.c"), .flags = &.{} });
+    ethernet_driver.addCSourceFile(.{ .file = sddf.path("drivers/network/meson/ethernet.c"), .flags = &no_ub_santize });
     ethernet_driver.addIncludePath(sddf.path("include"));
     ethernet_driver.addObject(ethernet_ring);
     b.installArtifact(ethernet_driver);
@@ -366,8 +372,8 @@ pub fn build(b: *std.Build) !void {
         .target = target,
         .optimize = optimize,
     });
-    micropython.addCSourceFiles(.{ .files = &micropython_sources });
-    micropython.addCSourceFiles(.{ .files = &micropython_port_sources });
+    micropython.addCSourceFiles(.{ .files = &micropython_sources, .flags = &no_ub_santize });
+    micropython.addCSourceFiles(.{ .files = &micropython_port_sources, .flags = &no_ub_santize });
     micropython.addCSourceFile(.{ .file = .{ .path = "../../fs/protocol/protocol.c" }, .flags = &.{} });
     micropython.addIncludePath(picolibc_dep.path(""));
     micropython.addIncludePath(picolibc_dep.path("newlib/libc/include"));
@@ -386,7 +392,7 @@ pub fn build(b: *std.Build) !void {
     b.installArtifact(micropython);
 
     const sdf = "kitty_zig.system";
-    const system_image = b.getInstallPath(.bin, "./loader.img");
+    const system_image = b.getInstallPath(.bin, "./kitty.img");
 
     const microkit_tool = microkit.path("bin/microkit").getPath(b);
     // Until https://github.com/ziglang/zig/issues/17462 is solved, the Zig build
