@@ -1,0 +1,35 @@
+.{
+    .name = "kitty",
+    .version = "0.1.0",
+
+    .dependencies = .{
+        .microkit_linux_x64 = .{
+            .url = "https://trustworthy.systems/Downloads/lionsos/microkit-sdk-linux-x86-x64.tar.gz",
+            .hash = "12200aee1a1b5d662a0bef8788b4bd57eae801c103ecf3d4bfbae2ff4b4aa433df20",
+        },
+        .microkit_macos_x64 = .{
+            .url = "https://trustworthy.systems/Downloads/lionsos/microkit-sdk-macos-x86-x64.tar.gz",
+            .hash = "1220e28a0a1b8c26a800ffc74852e4a9b666e9fdf1645316e51e2eb72287bc831dd5",
+        },
+        .microkit_macos_arm64 = .{
+            .url = "https://trustworthy.systems/Downloads/microkit_tutorial/sdk-macos-aarch64.tar.gz",
+            .hash = "1220f8e6298ab085afcf855880c13408c62661eb5906cbf85badf43ebce406f93eb4",
+        },
+        .sddf = .{
+            .path = "../../sddf"
+        },
+        .picolibc = .{
+            .url = "https://github.com/Ivan-Velickovic/picolibc/archive/refs/heads/main.tar.gz",
+            .hash = "12204a62acddec811244b84b8172dbca176f418a5fb5056f6895b574909c24bc0746",
+        },
+        .libco = .{
+            .path = "../../libco"
+        }
+    },
+    .paths = .{
+        "kitty.system",
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}

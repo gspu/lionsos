@@ -12,6 +12,7 @@
 #include "vfs_sddf_fs.h"
 #include <extmod/vfs.h>
 #include <sddf/serial/shared_ringbuffer.h>
+#include "../microkit_libc.h"
 
 /* Data for the Kitty Python script. */
 extern char _kitty_python_script[];

@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <string.h>
 
 typedef struct _mp_obj_vfs_sddf_fs_file_t {
     mp_obj_base_t base;

@@ -1,0 +1,17 @@
+MP_REGISTER_EXTENSIBLE_MODULE(MP_QSTR_io, mp_module_io);
+
+MP_REGISTER_EXTENSIBLE_MODULE(MP_QSTR_os, mp_module_os);
+
+MP_REGISTER_EXTENSIBLE_MODULE(MP_QSTR_time, mp_module_time);
+
+MP_REGISTER_MODULE(MP_QSTR___main__, mp_module___main__);
+
+MP_REGISTER_MODULE(MP_QSTR_builtins, mp_module_builtins);
+
+MP_REGISTER_MODULE(MP_QSTR_fb, fb_module);
+
+MP_REGISTER_MODULE(MP_QSTR_myport, myport_module);
+
+MP_REGISTER_MODULE(MP_QSTR_sys, mp_module_sys);
+
+MP_REGISTER_MODULE_DELEGATION(mp_module_sys, mp_module_sys_attr);

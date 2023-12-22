@@ -1,0 +1,22 @@
+.{
+    .name = "libco",
+    .version = "1.0.0",
+
+    .dependencies = .{
+        .picolibc = .{
+            .url = "https://github.com/Ivan-Velickovic/picolibc/archive/refs/heads/main.tar.gz",
+            .hash = "12204a62acddec811244b84b8172dbca176f418a5fb5056f6895b574909c24bc0746",
+        }
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "LICENSE.txt",
+        "libco.c",
+        "libco.h",
+        "settings.h",
+        "aarch64.c",
+        "amd64.c",
+        "arm.c",
+    },
+}
