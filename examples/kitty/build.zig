@@ -376,7 +376,7 @@ pub fn build(b: *std.Build) !void {
         .optimize = optimize,
     });
     micropython.addCSourceFiles(.{ .files = &micropython_sources, .flags = &no_ub_santize });
-    micropython.addCSourceFiles(.{ .files = &micropython_port_sources, .flags = &no_ub_santize });
+    micropython.addCSourceFiles(.{ .files = &micropython_port_sources, .flags = &(no_ub_santize ++ .{ "-Wno-implicit-function-declaration", "-Wno-int-conversion" }) });
     micropython.addCSourceFile(.{ .file = .{ .path = "../../fs/protocol/protocol.c" }, .flags = &.{} });
     micropython.addIncludePath(picolibc_dep.path(""));
     micropython.addIncludePath(picolibc_dep.path("newlib/libc/include"));
