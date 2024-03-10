@@ -16,3 +16,7 @@
 [submodule "libnfs"]
 	path = libnfs
 	url = git@github.com:au-ts/libnfs.git
+[submodule "microkit_libc"]
+	path = microkit_libc
+	url = git@github.com:au-ts/microkit_libc.git
+	branch = zig_lionsos
