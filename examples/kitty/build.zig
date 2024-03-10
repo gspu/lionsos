@@ -1,9 +1,6 @@
 const std = @import("std");
 const builtin = @import("builtin");
 
-// var general_purpose_allocator = std.heap.GeneralPurposeAllocator(.{}){};
-// const gpa = general_purpose_allocator.allocator();
-
 var libmicrokit: std.Build.LazyPath = undefined;
 var libmicrokit_linker_script: std.Build.LazyPath = undefined;
 var libmicrokit_include: std.Build.LazyPath = undefined;
@@ -166,41 +163,47 @@ const micropython_sources = [_][]const u8{
 
 pub fn build(b: *std.Build) !void {
     const optimize = b.standardOptimizeOption(.{});
-    const target = std.zig.CrossTarget{
+    const target = b.resolveTargetQuery(.{
         .cpu_arch = .aarch64,
         .cpu_model = .{ .explicit = &std.Target.arm.cpu.cortex_a55 },
         .os_tag = .freestanding,
         .abi = .none,
-    };
+    });
 
     const board = "odroidc4";
     const config = "debug";
 
+    // const sdk = b.option([]const u8, "sdk", "Use specific Microkit SDK");
+
     // Depending on the host, we need a different Microkit SDK. Right now
     // only Linux x64 and macOS x64/ARM64 are supported, so we need to check
     // what platform the person compiling the project is using.
-    const microkit_sdk_name = switch (builtin.target.os.tag) {
+    const microkit_dep = switch (builtin.target.os.tag) {
         .linux => switch (builtin.target.cpu.arch) {
-            .x86_64 => "microkit_linux_x64",
+            .x86_64 => b.lazyDependency("microkit_linux_x64", .{}),
             else => {
                 std.debug.print("ERROR: only x64 is supported on Linux.", .{});
                 std.os.exit(1);
             }
         },
         .macos => switch (builtin.target.cpu.arch) {
-            .x86_64 => "microkit_macos_x64",
-            .aarch64 => "microkit_macos_arm64",
+            .x86_64 => b.lazyDependency("microkit_macos_x64", .{}),
+            .aarch64 => b.lazyDependency("microkit_macos_arm64", .{}),
             else => {
                 std.debug.print("ERROR: only x64 and ARM64 are supported on macOS.", .{});
                 std.os.exit(1);
             }
         },
         else => {
-            std.debug.print("ERROR: OS '{s}' is not supported.", .{ builtin.target.os.tag });
+            std.debug.print("ERROR: building on OS '{s}' is not supported.", .{ builtin.target.os.tag });
         }
     };
 
-    const microkit = b.dependency(microkit_sdk_name, .{});
+    var microkit: *std.Build.Dependency = undefined;
+    if (microkit_dep) |microkit_d| {
+        microkit = microkit_d;
+    }
+
     const sddf = b.dependency("sddf", .{});
     const picolibc_dep = b.dependency("picolibc", .{
         .target = target,
@@ -394,17 +397,19 @@ pub fn build(b: *std.Build) !void {
     const sdf = "kitty_zig.system";
     const system_image = b.getInstallPath(.bin, "./kitty.img");
 
-    const microkit_tool = microkit.path("bin/microkit").getPath(b);
+    const microkit_tool = microkit.path("bin/microkit");
     // Until https://github.com/ziglang/zig/issues/17462 is solved, the Zig build
     // system does not respect the executable mode of dependencies, this affects
     // using the Microkit SDK since the tool is expected to be executable.
     // For now, we manually make it executable ourselves.
-    const microkit_tool_chmod = b.addSystemCommand(&[_][]const u8{ "chmod", "+x", microkit_tool });
+    const microkit_tool_chmod = b.addSystemCommand(&[_][]const u8{ "chmod", "+x" });
+    microkit_tool_chmod.addFileArg(microkit_tool);
 
     // Setup the defualt build step which will take our hello world ELF and build the final system
     // image using the Microkit tool.
-    const microkit_tool_cmd = b.addSystemCommand(&[_][]const u8{
-       microkit_tool,
+    const microkit_tool_cmd = std.Build.Step.Run.create(b, "run ");
+    microkit_tool_cmd.addFileArg(microkit_tool);
+    microkit_tool_cmd.addArgs(&[_][]const u8{
        sdf,
        "--search-path",
        b.getInstallPath(.bin, ""),

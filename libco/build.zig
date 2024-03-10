@@ -14,10 +14,10 @@ pub fn build(b: *std.Build) !void {
         .optimize = optimize,
     });
 
-    switch (target.getCpuArch()) {
+    switch (target.result.cpu.arch) {
         .x86_64, .aarch64, .arm => {},
         else => {
-            std.debug.print("Unexpected target architecture for libco: {}\n", .{ target.getCpuArch() });
+            std.debug.print("Unexpected target architecture for libco: {}\n", .{ target.result.cpu.arch });
             return error.UnexpectedCpuArch;
         }
     }

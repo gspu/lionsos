@@ -4,16 +4,19 @@
 
     .dependencies = .{
         .microkit_linux_x64 = .{
-            .url = "https://trustworthy.systems/Downloads/lionsos/microkit-sdk-linux-x86-x64.tar.gz",
-            .hash = "12200aee1a1b5d662a0bef8788b4bd57eae801c103ecf3d4bfbae2ff4b4aa433df20",
+            .url = "https://trustworthy.systems/Downloads/microkit/microkit-sdk-dev-7c679ea-linux-x86-64.tar.gz",
+            .hash = "12205c33751f848f123d21dab470dd32c0cf7ee8d5ad4f0fa7d8ec48d44eaaf147ad",
+            .lazy = true,
         },
         .microkit_macos_x64 = .{
-            .url = "https://trustworthy.systems/Downloads/lionsos/microkit-sdk-macos-x86-x64.tar.gz",
-            .hash = "1220e28a0a1b8c26a800ffc74852e4a9b666e9fdf1645316e51e2eb72287bc831dd5",
+            .url = "https://trustworthy.systems/Downloads/microkit/microkit-sdk-dev-7c679ea-macos-x86-64.tar.gz",
+            .hash = "122006435d0dacb1a61d733fcf5328ab43c4a2e43db2b708374e7c18a7db80d14d4e",
+            .lazy = true,
         },
         .microkit_macos_arm64 = .{
-            .url = "https://trustworthy.systems/Downloads/microkit_tutorial/sdk-macos-aarch64.tar.gz",
-            .hash = "1220f8e6298ab085afcf855880c13408c62661eb5906cbf85badf43ebce406f93eb4",
+            .url = "https://trustworthy.systems/Downloads/microkit/microkit-sdk-dev-7c679ea-macos-aarch64.tar.gz",
+            .hash = "122006435d0dacb1a61d733fcf5328ab43c4a2e43db2b708374e7c18a7db80d14d4e",
+            .lazy = true,
         },
         .sddf = .{
             .path = "../../sddf"
