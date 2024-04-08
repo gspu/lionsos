@@ -65,7 +65,13 @@ NFS=$(LIONSOS)/fs/nfs
 MUSL=$(LIONSOS)/musllibc
 
 # IMAGES := timer.elf vmm.elf ethernet.elf micropython.elf nfs.elf eth_copy.elf eth_virt_rx.elf eth_virt_tx.elf arp.elf uart_driver.elf serial_virt_rx.elf serial_virt_tx.elf i2c_virt.elf i2c_driver.elf
-IMAGES := timer.elf micropython.elf uart_driver.elf serial_virt_rx.elf serial_virt_tx.elf
+IMAGES := timer.elf \
+		  nfs.elf \
+		  ethernet.elf eth_copy.elf eth_virt_rx.elf eth_virt_tx.elf arp.elf \
+		  micropython.elf \
+		  uart_driver.elf \
+		  serial_virt_rx.elf \
+		  serial_virt_tx.elf
 CFLAGS := \
 	-mtune=$(CPU) \
 	-mstrict-align \
@@ -247,7 +253,7 @@ $(BUILD_DIR)/eth_virt_tx.o: $(NETWORK_COMPONENTS)/virt_tx.c
 $(BUILD_DIR)/arp.o: $(NETWORK_COMPONENTS)/arp.c
 	aarch64-none-elf-gcc -c $(NETWORK_COMPONENT_CFLAGS) $< -o $@
 
-$(BUILD_DIR)/eth_copy.elf: $(BUILD_DIR)/eth_copy.o $(BUILD_DIR)/sddf_putchar_debug.o
+$(BUILD_DIR)/eth_copy.elf: $(BUILD_DIR)/eth_copy.o $(BUILD_DIR)/sddf_util_cache.o $(BUILD_DIR)/sddf_putchar_debug.o
 	aarch64-none-elf-ld $(NETWORK_COMPONENTS_LDFLAGS) $(BUILD_DIR)/eth_copy.o $(NETWORK_COMPONENTS_LIBS) $(BUILD_DIR)/sddf_putchar_debug.o -o $(BUILD_DIR)/eth_copy.elf
 
 $(BUILD_DIR)/eth_virt_rx.elf: $(BUILD_DIR)/eth_virt_rx.o $(BUILD_DIR)/sddf_util_cache.o $(BUILD_DIR)/sddf_putchar_debug.o
@@ -317,7 +323,17 @@ $(IMAGE_FILE) $(REPORT_FILE): $(addprefix $(BUILD_DIR)/, $(IMAGES)) $(SYSTEM_FIL
 	$(MICROKIT_TOOL) $(SYSTEM_FILE) --search-path $(BUILD_DIR) --board $(MICROKIT_BOARD) --config $(MICROKIT_CONFIG) -o $(IMAGE_FILE) -r $(REPORT_FILE)
 
 qemu: $(IMAGE_FILE)
-	$(QEMU) -machine virt,virtualization=on -cpu cortex-a53 -serial mon:stdio -device loader,file=$(IMAGE_FILE),addr=0x70000000,cpu-num=0 -m size=2G -nographic -device virtio-net-device,netdev=netdev0 -netdev user,id=netdev0
+	$(QEMU) -machine virt,virtualization=on \
+			-cpu cortex-a53 \
+			-serial mon:stdio \
+			-device loader,file=$(IMAGE_FILE),addr=0x70000000,cpu-num=0 \
+			-m size=2G \
+			-nographic \
+			-device virtio-net-device,netdev=netdev0 \
+			-netdev user,id=netdev0,hostfwd=tcp::8080-10.0.2.16:1236 \
+			-global virtio-mmio.force-legacy=false \
+			-d guest_errors \
+			-object filter-dump,id=netdev0,netdev=netdev0,file=qemu_netdev.log
 
 FORCE: ;
 
