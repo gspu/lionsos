@@ -6,13 +6,14 @@ CC := aarch64-none-elf-gcc
 LD := aarch64-none-elf-ld
 
 LIONSOS := ../../../..
+KITTY := $(LIONSOS)/examples/kitty
 SDDF := $(LIONSOS)/sddf
 SDDF_UTIL := $(SDDF)/util
 LIBCO := $(LIONSOS)/libco
 LWIP := $(SDDF)/network/ipstacks/lwip
 # Path to micropython source code
 MICROPYTHON_SRC := $(LIONSOS)/micropython
-FROZEN_MANIFEST := $(LIONSOS)/micropython/extmod/asyncio/manifest.py
+FROZEN_MANIFEST := $(KITTY)/manifest.py
 
 # Include the core environment definitions; this will set $(TOP).
 include $(MICROPYTHON_SRC)/py/mkenv.mk

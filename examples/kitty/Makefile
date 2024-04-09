@@ -322,15 +322,24 @@ directories:
 $(IMAGE_FILE) $(REPORT_FILE): $(addprefix $(BUILD_DIR)/, $(IMAGES)) $(SYSTEM_FILE)
 	$(MICROKIT_TOOL) $(SYSTEM_FILE) --search-path $(BUILD_DIR) --board $(MICROKIT_BOARD) --config $(MICROKIT_CONFIG) -o $(IMAGE_FILE) -r $(REPORT_FILE)
 
+<<<<<<< HEAD
 qemu: $(IMAGE_FILE)
 	sudo $(QEMU) -machine virt,virtualization=on \
+=======
+qemu: all
+	$(QEMU) -machine virt,virtualization=on \
+>>>>>>> 07736fe7831123bc6011bcd17b76645dc0ad33d0
 			-cpu cortex-a53 \
 			-serial mon:stdio \
 			-device loader,file=$(IMAGE_FILE),addr=0x70000000,cpu-num=0 \
 			-m size=2G \
 			-nographic \
 			-device virtio-net-device,netdev=netdev0 \
+<<<<<<< HEAD
 			-netdev user,id=netdev0,hostfwd=tcp::8049-:2049,hostfwd=tcp::3232-:33333 \
+=======
+			-netdev user,id=netdev0,hostfwd=tcp::3738-:3738 \
+>>>>>>> 07736fe7831123bc6011bcd17b76645dc0ad33d0
 			-global virtio-mmio.force-legacy=false \
 			-d guest_errors \
 			-object filter-dump,id=netdev0,netdev=netdev0,file=qemu_netdev.log

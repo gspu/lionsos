@@ -7,7 +7,7 @@ import asyncio
 import errno
 from pn532 import PN532
 import font
-from font_writer import CWriter
+from writer import CWriter
 
 current_uid = []
 current_equal_count = 0
@@ -18,7 +18,7 @@ token = 0
 reader_stream = None
 writer_stream = None
 
-IP_ADDRESS = "172.16.0.2"
+IP_ADDRESS = "0.0.0.0"
 PORT = 3738
 
 
@@ -251,9 +251,9 @@ async def read_card_main():
 async def main():
     global reader_stream
     global writer_stream
+    print(f"KITTY|INFO: starting at {time.time()}, IP: {IP_ADDRESS}, PORT: {PORT}")
     reader_stream, writer_stream = await asyncio.open_connection(IP_ADDRESS, PORT)
 
-    print(f"KITTY|INFO: starting at {}", time.time())
     size = 688000
     cat_buf = bytearray(size)
     with open("catwithfish.data", "rb") as f:
