@@ -44,6 +44,8 @@ void nfs_init(void) {
         return;
     }
 
+    // Set the mountport to 3232
+    nfs_set_mountport(nfs, 3232);
     /*
      * We want to have the NFS client attempt to re-connect indefinitely when our connection
      * with the server is closed or dropped.
