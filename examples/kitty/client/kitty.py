@@ -251,9 +251,9 @@ async def read_card_main():
 async def main():
     global reader_stream
     global writer_stream
+    print(f"KITTY|INFO: starting at {time.time()}, IP: {IP_ADDRESS}, PORT: {PORT}")
     reader_stream, writer_stream = await asyncio.open_connection(IP_ADDRESS, PORT)
 
-    print(f"KITTY|INFO: starting at {}", time.time())
     size = 688000
     cat_buf = bytearray(size)
     with open("catwithfish.data", "rb") as f:
