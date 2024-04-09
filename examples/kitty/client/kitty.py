@@ -7,7 +7,7 @@ import asyncio
 import errno
 from pn532 import PN532
 import font
-from font_writer import CWriter
+from writer import CWriter
 
 current_uid = []
 current_equal_count = 0
