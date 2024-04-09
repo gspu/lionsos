@@ -18,7 +18,7 @@ token = 0
 reader_stream = None
 writer_stream = None
 
-IP_ADDRESS = "172.16.0.2"
+IP_ADDRESS = "0.0.0.0"
 PORT = 3738
 
 

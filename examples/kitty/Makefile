@@ -322,7 +322,7 @@ directories:
 $(IMAGE_FILE) $(REPORT_FILE): $(addprefix $(BUILD_DIR)/, $(IMAGES)) $(SYSTEM_FILE)
 	$(MICROKIT_TOOL) $(SYSTEM_FILE) --search-path $(BUILD_DIR) --board $(MICROKIT_BOARD) --config $(MICROKIT_CONFIG) -o $(IMAGE_FILE) -r $(REPORT_FILE)
 
-qemu: $(IMAGE_FILE)
+qemu: all
 	$(QEMU) -machine virt,virtualization=on \
 			-cpu cortex-a53 \
 			-serial mon:stdio \
@@ -330,7 +330,7 @@ qemu: $(IMAGE_FILE)
 			-m size=2G \
 			-nographic \
 			-device virtio-net-device,netdev=netdev0 \
-			-netdev user,id=netdev0,hostfwd=tcp::8080-10.0.2.16:1236 \
+			-netdev user,id=netdev0,hostfwd=tcp::3738-:3738 \
 			-global virtio-mmio.force-legacy=false \
 			-d guest_errors \
 			-object filter-dump,id=netdev0,netdev=netdev0,file=qemu_netdev.log
