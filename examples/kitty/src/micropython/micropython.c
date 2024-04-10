@@ -101,8 +101,8 @@ start_repl:
     gc_init(heap, heap + sizeof(heap));
     mp_init();
 
-    // init_nfs();
-    // init_networking();
+    init_nfs();
+    init_networking();
 
     // Start a normal REPL; will exit when ctrl-D is entered on a blank line.
     pyexec_friendly_repl();
@@ -139,8 +139,8 @@ void process_rx(void);
 void mpnet_handle_notify(void);
 
 void notified(microkit_channel ch) {
-    // pyb_lwip_poll();
-    // process_rx();
+    pyb_lwip_poll();
+    process_rx();
 
     switch (ch) {
     case SERIAL_RX_CH:
@@ -171,7 +171,7 @@ void notified(microkit_channel ch) {
         co_switch(t_mp);
     }
 
-    // mpnet_handle_notify();
+    mpnet_handle_notify();
 }
 
 // Handle uncaught exceptions (should never be reached in a correct C implementation).
