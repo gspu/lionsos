@@ -80,7 +80,6 @@ void notified(microkit_channel ch) {
             }
             if (sevents) {
                 int err = nfs_service(nfs, sevents);
-                microkit_dbg_puts(nfs_get_error(nfs));
                 dlogp(err, "nfs_service error");
             }
         }
