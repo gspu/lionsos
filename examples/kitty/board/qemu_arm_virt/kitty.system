@@ -219,6 +219,9 @@
 
     <protection_domain name="micropython" priority="1">
         <program_image path="micropython.elf" />
+        <map mr="nfs_command_queue" vaddr="0x7_900_000" perms="rw" cached="true" setvar_vaddr="nfs_command_queue" />
+        <map mr="nfs_completion_queue" vaddr="0x7_902_000" perms="rw" cached="true" setvar_vaddr="nfs_completion_queue" />
+        <map mr="shared_nfs_micropython" vaddr="0x7_800_000" perms="rw" cached="true" setvar_vaddr="nfs_share" />
 
         <map mr="serial_tx_free_micropython" vaddr="0x60_000_000" perms="rw" cached="true" setvar_vaddr="serial_tx_free" />
         <map mr="serial_tx_active_micropython" vaddr="0x60_200_000" perms="rw" cached="true" setvar_vaddr="serial_tx_active" />
@@ -226,6 +229,14 @@
         <map mr="serial_rx_active_micropython" vaddr="0x70_200_000" perms="rw" cached="true" setvar_vaddr="serial_rx_active" />
         <map mr="serial_tx_data_micropython" vaddr="0x50_400_000" perms="rw" cached="true" setvar_vaddr="serial_tx_data" />
         <map mr="serial_rx_data_micropython" vaddr="0x50_600_000" perms="rw" cached="true" setvar_vaddr="serial_rx_data" />
+
+        <map mr="eth_rx_free_micropython" vaddr="0x4_000_000" perms="rw" cached="true" setvar_vaddr="rx_free" />
+        <map mr="eth_rx_active_micropython" vaddr="0x4_200_000" perms="rw" cached="true" setvar_vaddr="rx_active" />
+        <map mr="eth_tx_free_micropython" vaddr="0x3_400_000" perms="rw" cached="true" setvar_vaddr="tx_free" />
+        <map mr="eth_tx_active_micropython" vaddr="0x3_600_000" perms="rw" cached="true" setvar_vaddr="tx_active" />
+
+        <map mr="eth_rx_buffer_data_region_micropython" vaddr="0x2_200_000" perms="rw" cached="true" setvar_vaddr="rx_buffer_data_region" />
+        <map mr="eth_tx_buffer_data_region_micropython" vaddr="0x2_000_000" perms="rw" cached="true" setvar_vaddr="tx_buffer_data_region" />
     </protection_domain>
 
     <channel>

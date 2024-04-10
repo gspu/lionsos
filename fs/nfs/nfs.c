@@ -44,8 +44,6 @@ void nfs_init(void) {
         return;
     }
 
-    // Set the mountport to 3232
-    nfs_set_mountport(nfs, 3232);
     /*
      * We want to have the NFS client attempt to re-connect indefinitely when our connection
      * with the server is closed or dropped.
@@ -82,6 +80,7 @@ void notified(microkit_channel ch) {
             }
             if (sevents) {
                 int err = nfs_service(nfs, sevents);
+                microkit_dbg_puts(nfs_get_error(nfs));
                 dlogp(err, "nfs_service error");
             }
         }
