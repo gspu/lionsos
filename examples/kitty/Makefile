@@ -53,7 +53,7 @@ LIONSOS := ../..
 SDDF := $(LIONSOS)/sddf
 LIBVMM := $(LIONSOS)/libvmm
 
-VMM_IMAGE_DIR := src/vmm/images
+VMM_IMAGE_DIR := board/$(MICROKIT_BOARD)/vmm_images
 LINUX := $(VMM_IMAGE_DIR)/linux
 INITRD := $(VMM_IMAGE_DIR)/rootfs.cpio.gz
 DTS := $(VMM_IMAGE_DIR)/linux.dts
@@ -67,6 +67,7 @@ MUSL=$(LIONSOS)/musllibc
 # IMAGES := timer.elf vmm.elf ethernet.elf micropython.elf nfs.elf eth_copy.elf eth_virt_rx.elf eth_virt_tx.elf arp.elf uart_driver.elf serial_virt_rx.elf serial_virt_tx.elf i2c_virt.elf i2c_driver.elf
 IMAGES := timer.elf \
 		  nfs.elf \
+		  vmm.elf \
 		  ethernet.elf eth_copy.elf eth_virt_rx.elf eth_virt_tx.elf arp.elf \
 		  micropython.elf \
 		  uart_driver.elf \
@@ -328,12 +329,11 @@ qemu: all
 			-serial mon:stdio \
 			-device loader,file=$(IMAGE_FILE),addr=0x70000000,cpu-num=0 \
 			-m size=2G \
-			-nographic \
 			-device virtio-net-device,netdev=netdev0 \
 			-netdev user,id=netdev0 \
 			-global virtio-mmio.force-legacy=false \
 			-d guest_errors \
-			-object filter-dump,id=netdev0,netdev=netdev0,file=qemu_netdev.log
+			-device virtio-gpu-pci
 
 FORCE: ;
 

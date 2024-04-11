@@ -20,6 +20,10 @@
 #define GUEST_RAM_SIZE 0x10000000
 #define GUEST_DTB_VADDR 0x2f000000
 #define GUEST_INIT_RAM_DISK_VADDR 0x2c000000
+#elif defined(CONFIG_PLAT_QEMU_ARM_VIRT)
+#define GUEST_RAM_SIZE 0x10000000
+#define GUEST_DTB_VADDR 0x4f000000
+#define GUEST_INIT_RAM_DISK_VADDR 0x4d000000
 #else
 #error "Need to define platform specific guest info"
 #endif
