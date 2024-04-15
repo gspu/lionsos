@@ -255,15 +255,15 @@ async def main():
     print(f"KITTY|INFO: starting at {time.time()}, IP: {IP_ADDRESS}, PORT: {PORT}")
     reader_stream, writer_stream = await asyncio.open_connection(IP_ADDRESS, PORT)
 
-    # size = 688000
-    # cat_buf = bytearray(size)
-    # with open("catwithfish.data", "rb") as f:
-    #     nbytes = f.readinto(cat_buf)
-    #     print(f"KITTY|INFO: read {nbytes} bytes")
-    #     pic = memoryview(cat_buf)
-    #     # print(pic[:4])
-    #     print("KITTY|INFO: read image, starting to draw")
-    #     draw_image(display, 0, 40, pic[0:])
+    size = 688000
+    cat_buf = bytearray(size)
+    with open("catwithfish.data", "rb") as f:
+        nbytes = f.readinto(cat_buf)
+        print(f"KITTY|INFO: read {nbytes} bytes")
+        pic = memoryview(cat_buf)
+        # print(pic[:4])
+        print("KITTY|INFO: read image, starting to draw")
+        draw_image(display, 0, 40, pic[0:])
     display.show()
     print(time.time())
     print("KITTY|INFO: about to draw string!")
